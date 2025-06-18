@@ -4,7 +4,8 @@ setup(
     name="lol_sim_env",
     version="0.1.0",
     description="League of Legends Simulated Laning Environment for Reinforcement Learning",
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     install_requires=[
         "numpy>=1.21.0",
         "gymnasium>=0.29.0",

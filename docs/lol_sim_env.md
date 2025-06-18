@@ -121,20 +121,20 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         4.  "Create `requirements.txt`, add: `numpy gymnasium pyyaml`."
 * ~~**Task 1.1.2: Create Initial Package Structure**~~ ✅ **COMPLETED**
     * **Objective:** Set up Python package structure for `lol_sim_env`.
-    * **File(s):** Create directories and `__init__.py` files under `lol_sim_env_project/lol_sim_env/` as per `architecture.md`.
+    * **File(s):** Create directories and `__init__.py` files under `lol_sim_env_project/src/` as per `architecture.md`.
     * **Instructions for AI:**
-        1.  "Inside `lol_sim_env_project/`, create directory `lol_sim_env`."
-        2.  "Inside `lol_sim_env/`, create empty `__init__.py`."
-        3.  "Inside `lol_sim_env/`, create subdirectories: `envs`, `game_logic`, `configs`, `utils`."
+        1.  "Inside `lol_sim_env_project/`, create directory `src`."
+        2.  "Inside `src/`, create empty `__init__.py`."
+        3.  "Inside `src/`, create subdirectories: `envs`, `game_logic`, `configs`, `utils`."
         4.  "For `envs`, `game_logic`, `configs`, `utils`, create empty `__init__.py` inside each."
-        5.  "Inside `lol_sim_env/game_logic/`, create subdirectories: `core`, `units`, `systems`."
+        5.  "Inside `src/game_logic/`, create subdirectories: `core`, `units`, `systems`."
         6.  "For `core`, `units`, `systems`, create empty `__init__.py` inside each."
-        7.  "Inside `lol_sim_env/configs/`, create subdirectories: `champions`, `items`."
-        8.  "Inside `lol_sim_env/configs/items/`, create subdirectory `components`."
+        7.  "Inside `src/configs/`, create subdirectories: `champions`, `items`."
+        8.  "Inside `src/configs/items/`, create subdirectory `components`."
         9.  "For `champions`, `items`, `components`, create empty `__init__.py` inside each."
 * **Task 1.1.3: Define Base `Entity` Class**
     * **Objective:** Create fundamental `Entity` class. (Ref: R2.1.1)
-    * **File(s):** `lol_sim_env/game_logic/core/entity.py`.
+    * **File(s):** `src/game_logic/core/entity.py`.
     * **Instructions for AI:**
         1.  "In `entity.py`, import `numpy` as `np` and `typing.Any`."
         2.  "Define class `Entity`."
@@ -143,7 +143,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         5.  "Add placeholder method `update(self, time_delta: float, game_state: Any): pass`."
 * **Task 1.1.4: Define Base `GameObject` Class**
     * **Objective:** Extend `Entity` for objects with game stats. (Ref: R2.1.1)
-    * **File(s):** `lol_sim_env/game_logic/core/game_object.py`.
+    * **File(s):** `src/game_logic/core/game_object.py`.
     * **Instructions for AI:**
         1.  "In `game_object.py`, import `Entity` from `.entity`, `numpy` as `np`, `typing.Dict, Any`."
         2.  "Define class `GameObject(Entity)`."
@@ -155,7 +155,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         8.  "Property `is_alive(self) -> bool`: Returns `self.stats.get('hp', 0) > 0`."
 * **Task 1.1.5: Implement `GameClock`**
     * **Objective:** Manage simulation time and speed. (Ref: R2.1.3)
-    * **File(s):** `lol_sim_env/game_logic/core/game_clock.py`.
+    * **File(s):** `src/game_logic/core/game_clock.py`.
     * **Instructions for AI:**
         1.  "Define class `GameClock`."
         2.  "`__init__(self, tick_duration: float = 0.1, game_speed_multiplier: float = 1.0)`."
@@ -165,7 +165,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         6.  "Method `reset(self)`: Sets `self.current_time = 0.0`."
 * **Task 1.1.6: Implement `GameState` Container**
     * **Objective:** Hold all game entities and manage global state. (Ref: R2.1.4)
-    * **File(s):** `lol_sim_env/game_logic/game_state.py`.
+    * **File(s):** `src/game_logic/game_state.py`.
     * **Instructions for AI:**
         1.  "Import `GameClock`, `List, Dict, Type` from `typing`, `GameObject`."
         2.  "Define class `GameState`."
@@ -177,7 +177,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         8.  "Method `reset(self)`: Clear all entity lists/dicts. Reset clock."
 * **Task 1.1.7: Implement `LaneMap` Basics**
     * **Objective:** Define lane boundaries. (Ref: R2.1.2)
-    * **File(s):** `lol_sim_env/game_logic/core/map.py`.
+    * **File(s):** `src/game_logic/core/map.py`.
     * **Instructions for AI:**
         1.  "Import `numpy` as `np`."
         2.  "Define class `LaneMap`."
@@ -186,7 +186,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         5.  "Method `is_within_bounds(self, position: np.ndarray) -> bool`: Checks if `0 <= position[0] <= self.length` and `0 <= position[1] <= self.width`."
 * **Task 1.1.8: Create `utils/vector_math.py`**
     * **Objective:** Basic 2D vector operations.
-    * **File(s):** `lol_sim_env/utils/vector_math.py`.
+    * **File(s):** `src/utils/vector_math.py`.
     * **Instructions for AI:**
         1.  "Import `numpy` as `np`."
         2.  "Implement `distance(p1: np.ndarray, p2: np.ndarray) -> float`."
@@ -194,7 +194,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         4.  "Implement `angle_between(v1: np.ndarray, v2: np.ndarray) -> float` (optional for now)."
 * **Task 1.1.9: Create `utils/constants.py`**
     * **Objective:** Define global constants.
-    * **File(s):** `lol_sim_env/utils/constants.py`.
+    * **File(s):** `src/utils/constants.py`.
     * **Instructions for AI:**
         1.  "Define `TEAM_BLUE = 0`."
         2.  "Define `TEAM_RED = 1`."
@@ -204,7 +204,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
 
 * **Task 2.1: Implement `Champion` Base Class**
     * **Objective:** Define core champion attributes and methods. (Ref: R2.2.1)
-    * **File(s):** `lol_sim_env/game_logic/units/champion.py`.
+    * **File(s):** `src/game_logic/units/champion.py`.
     * **Instructions for AI:**
         1.  "Import `GameObject` from `..core.game_object`, `List, Dict, Type` from `typing`, `Ability` from `..systems.ability_system` (placeholder, will create `Ability` class later)."
         2.  "Define class `Champion(GameObject)`."
@@ -219,7 +219,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         11. "Method `update(self, time_delta: float, game_state: Any)`: If `respawn_timer > 0`, tick down timer. Else, allow actions."
 * **Task 2.2: Implement `MovementSystem`**
     * **Objective:** Handle entity movement. (Ref: R2.3.3)
-    * **File(s):** `lol_sim_env/game_logic/systems/movement_system.py`.
+    * **File(s):** `src/game_logic/systems/movement_system.py`.
     * **Instructions for AI:**
         1.  "Import `GameObject`, `GameState`, `LaneMap`, `np`."
         2.  "Define class `MovementSystem`."
@@ -227,7 +227,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         4.  "Method `handle_collisions(self, entity: GameObject, all_other_entities: List[GameObject])`: (MVP Simplification) For now, if `entity` overlaps significantly with any other (based on radii), revert its last movement or prevent it. More complex response deferred."
 * **Task 2.3: Implement `Taric` Specifics (Stats & Config)**
     * **Objective:** Create `Taric` class and load his base data. (Ref: R2.2.2)
-    * **File(s):** `lol_sim_env/game_logic/units/taric.py`, `lol_sim_env/configs/champions/taric.yaml`.
+    * **File(s):** `src/game_logic/units/taric.py`, `src/configs/champions/taric.yaml`.
     * **Instructions for AI:**
         1.  "In `taric.py`, import `Champion`."
         2.  "Define class `Taric(Champion)`."
@@ -235,7 +235,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         4.  "Create `taric.yaml` in `configs/champions/`. Populate with Taric's Level 1 base stats (HP, Mana, AD, Armor, MR, MS, Attack Range, HP Regen, Mana Regen etc.) by referencing the official League of Legends Wiki for *Taric*. Also add growth stats (e.g., `hp_per_level`). Add ability parameters for Q,W,E,R (e.g., `q_base_heal`, `q_mana_cost`, `q_cooldown`)."
 * **Task 2.4: Create `Ability` Base and `AbilitySystem` Shell**
     * **Objective:** Define structure for abilities and their management. (Ref: R2.3.1)
-    * **File(s):** `lol_sim_env/game_logic/units/ability.py` (or `systems/`), `lol_sim_env/game_logic/systems/ability_system.py`.
+    * **File(s):** `src/game_logic/units/ability.py` (or `systems/`), `src/game_logic/systems/ability_system.py`.
     * **Instructions for AI:**
         1.  "In `ability.py` (or `systems/ability.py`), define base class `Ability`."
         2.  "`__init__(self, owner: Champion, name: str, level: int, mana_cost: float, cooldown: float, range: float = 0, ...)` based on common ability params from `taric.yaml`."
@@ -261,7 +261,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         7.  "Method `resolve_auto_attack(self, attacker: Champion, target: GameObject)`: Get `attacker.stats['attack_damage']`. Call `self.apply_damage(target, damage, attacker=attacker)`."
 * **Task 2.6: Basic Gym Environment Shell (`TaricLaningSimEnv` - CRITICAL INTEGRATION POINT)**
     * **Objective:** Create the runnable Gym environment with Taric's MVP capabilities. (Ref: R1)
-    * **File(s):** `lol_sim_env/envs/taric_laning_sim_env.py`.
+    * **File(s):** `src/envs/taric_laning_sim_env.py`.
     * **Instructions for AI:**
         1.  "Import `gymnasium as gym`, `spaces` from `gymnasium`, `np`, relevant classes from `game_logic`."
         2.  "Define `TaricLaningSimEnv(gym.Env)`."
