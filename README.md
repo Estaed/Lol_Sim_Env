@@ -38,5 +38,5 @@ This environment is designed to work with the **Taric AI Agent** project, which 
 
 ---
 
-**Version**: 1.2  
-**Last Updated**: December 2024 
+**Version**: 1.1  
+**Last Updated**: June 2025
