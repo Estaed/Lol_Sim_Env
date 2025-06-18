@@ -25,8 +25,8 @@ This project creates a custom, lightweight, and fast Python simulation of the Lo
 
 ## Documentation
 
-- **[Project Specification](lol_sim_env.md)**: Complete project requirements, features, and detailed implementation plan
-- **[Architecture Overview](Architecture_env.md)**: File structure and architectural design
+- **[Project Specification](docs/lol_sim_env.md)**: Complete project requirements, features, and detailed implementation plan
+- **[Architecture Overview](docs/Architecture_env.md)**: File structure and architectural design
 
 ## Development Status
 
@@ -38,5 +38,5 @@ This environment is designed to work with the **Taric AI Agent** project, which 
 
 ---
 
-**Version**: 1.1  
-**Last Updated**: June 2025
+**Version**: 1.2  
+**Last Updated**: December 2024
