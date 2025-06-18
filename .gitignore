@@ -126,12 +126,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# IDE - Keep settings.json for team consistency, exclude personal settings
+.vscode/*
+!.vscode/settings.json
 
 # OS
 .DS_Store
