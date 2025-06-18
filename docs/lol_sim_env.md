@@ -111,7 +111,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
 
 **Phase 1: Core Simulation Engine Setup (Corresponds to old M1.1)**
 
-* **Task 1.1.1: Initialize Project Repository and Core Files**
+* ~~**Task 1.1.1: Initialize Project Repository and Core Files**~~ ✅ **COMPLETED**
     * **Objective:** Create main project directory, init Git, create placeholder `setup.py` and `requirements.txt`.
     * **File(s):** `lol_sim_env_project/` (root), `setup.py`, `requirements.txt`.
     * **Instructions for AI:**
