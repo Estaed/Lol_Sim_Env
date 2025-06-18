@@ -119,7 +119,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         2.  "Inside, initialize Git."
         3.  "Create empty `setup.py`."
         4.  "Create `requirements.txt`, add: `numpy gymnasium pyyaml`."
-* **Task 1.1.2: Create Initial Package Structure**
+* ~~**Task 1.1.2: Create Initial Package Structure**~~ ✅ **COMPLETED**
     * **Objective:** Set up Python package structure for `lol_sim_env`.
     * **File(s):** Create directories and `__init__.py` files under `lol_sim_env_project/lol_sim_env/` as per `architecture.md`.
     * **Instructions for AI:**
