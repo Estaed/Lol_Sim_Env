@@ -141,7 +141,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         3.  "`__init__(self, entity_id: str, team_id: int, position: np.ndarray, radius: float)`."
         4.  "Store args as `self.entity_id`, `self.team_id`, `self.position` (ensure `np.array(position, dtype=float)`), `self.radius`."
         5.  "Add placeholder method `update(self, time_delta: float, game_state: Any): pass`."
-* **Task 1.1.4: Define Base `GameObject` Class**
+* ~~**Task 1.1.4: Define Base `GameObject` Class**~~ ✅ **COMPLETED**
     * **Objective:** Extend `Entity` for objects with game stats. (Ref: R2.1.1)
     * **File(s):** `src/game_logic/core/game_object.py`.
     * **Instructions for AI:**
