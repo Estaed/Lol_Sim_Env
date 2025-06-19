@@ -1,0 +1,125 @@
+# Simulation Parameters Configuration
+# Contains general simulation parameters for the LoL 2v2 laning environment
+
+# ==========================================
+# LANE MAP DIMENSIONS
+# ==========================================
+lane_map:
+  length: 1000.0    # Lane length in simulation units (from blue side base to red side base area)
+  width: 400.0      # Lane width in simulation units (perpendicular to lane direction)
+
+# ==========================================
+# TIME & PERFORMANCE SETTINGS
+# ==========================================
+timing:
+  tick_duration: 0.1           # Duration of one simulation tick in seconds (10 FPS default)
+  game_speed_multiplier: 1.0   # Multiplier for game speed (1.0 = normal, 2.0 = 2x speed, etc.)
+  max_episode_time: 900.0      # Maximum episode duration in simulated seconds (15 minutes)
+  max_episode_time_mvp: 60.0   # Shorter episode time for MVP testing (1 minute)
+
+# ==========================================
+# CHAMPION SETTINGS
+# ==========================================
+champions:
+  starting_gold: 500           # Gold each champion starts with
+  starting_level: 1            # Starting level for all champions
+  base_respawn_time: 10.0      # Base respawn time in seconds (will scale with level later)
+  max_level: 18                # Maximum champion level
+
+# ==========================================
+# EXPERIENCE SYSTEM
+# ==========================================
+experience:
+  # XP required to reach each level (index 0 = XP for level 1->2, etc.)
+  xp_thresholds: [280, 660, 1140, 1720, 2400, 3180, 4060, 5040, 6120, 7300, 8580, 9960, 11440, 13020, 14700, 16480, 18360]
+  
+  # XP rewards
+  minion_kill_xp: 29.0         # XP for killing a minion (will vary by minion type later)
+  champion_kill_xp: 400.0      # Base XP for champion takedown
+  assist_xp_multiplier: 0.5    # Multiplier for assist XP
+
+# ==========================================
+# GOLD SYSTEM
+# ==========================================
+gold:
+  passive_gold_per_second: 2.0 # Passive gold generation rate
+  minion_kill_gold: 21.0       # Gold for killing a minion (base amount)
+  champion_kill_gold: 300.0    # Base gold for champion takedown
+  first_blood_bonus: 100.0     # Additional gold for first kill of the game
+
+# ==========================================
+# MINION WAVES
+# ==========================================
+minions:
+  wave_spawn_interval: 30.0    # Time between minion wave spawns (seconds)
+  minions_per_wave: 6          # Number of minions per wave (3 melee + 3 caster for MVP)
+  siege_minion_frequency: 3    # Every Nth wave includes a siege minion (wave 3, 6, 9, etc.)
+  
+  # Minion progression (stats scale over time)
+  stat_scaling_per_minute: 0.02 # 2% stat increase per minute
+
+# ==========================================
+# COMBAT SYSTEM
+# ==========================================
+combat:
+  # Damage calculation settings
+  armor_effectiveness: 1.0     # Multiplier for armor damage reduction
+  magic_resist_effectiveness: 1.0  # Multiplier for magic resist damage reduction
+  
+  # Status effect durations (in seconds)
+  default_stun_duration: 1.5
+  default_slow_duration: 2.0
+  default_shield_duration: 5.0
+
+# ==========================================
+# MOVEMENT SYSTEM
+# ==========================================
+movement:
+  collision_radius_multiplier: 1.0  # Multiplier for collision detection
+  movement_smoothing: 0.1           # For movement interpolation (if implemented)
+
+# ==========================================
+# TARIC SPECIFIC SETTINGS
+# ==========================================
+taric:
+  # Starting position in lane (will be placed relative to lane coordinates)
+  start_position_x: 200.0     # Distance from blue side base
+  start_position_y: 200.0     # Centered in lane width
+  
+  # Ability scalings (used in conjunction with taric.yaml)
+  ability_haste_cap: 0.67     # Maximum ability haste (67% = 3x faster cooldowns)
+
+# ==========================================
+# RENDERING & DEBUG
+# ==========================================
+rendering:
+  default_render_mode: "text"  # "text", "human", or "rgb_array"
+  debug_mode: false           # Enable verbose logging and debug overlays
+  fps_target: 60              # Target FPS for visual rendering mode
+
+# ==========================================
+# ITEM SYSTEM (MVP)
+# ==========================================
+items:
+  # Item purchase settings
+  purchase_range: 50.0        # Range from base position to purchase items
+  sell_value_multiplier: 0.7  # Items sell for 70% of purchase price
+
+# ==========================================
+# AI BEHAVIOR SETTINGS
+# ==========================================
+ai:
+  # Default AI reaction times and behaviors
+  reaction_time: 0.2          # Base AI reaction time in seconds
+  aggression_level: 0.5       # Default aggression for enemy AI (0.0 = passive, 1.0 = very aggressive)
+  
+  # Path finding and movement
+  path_update_frequency: 0.5  # How often AI recalculates paths (seconds)
+  
+# ==========================================
+# PERFORMANCE OPTIMIZATION
+# ==========================================
+performance:
+  max_entities: 1000          # Maximum number of entities in the simulation
+  collision_check_frequency: 1 # Check collisions every N ticks (1 = every tick)
+  cleanup_frequency: 100      # Clean up dead entities every N ticks 
