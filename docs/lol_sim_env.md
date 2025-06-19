@@ -96,8 +96,10 @@ This section outlines the target functionality. The "IV. Detailed Implementation
 
 ### R6: Debugging & Visualization
 * R6.1: Text-based `render()` method in `TaricLaningSimEnv`.
-* R6.2 (Optional): Simple Pygame visualizer.
-* R6.3: Debug mode flag for verbose logging.
+* R6.2: **Pygame-based 2D visual renderer** for real-time game observation.
+* R6.3: Visual renderer supports multiple render modes (`human`, `rgb_array`).
+* R6.4: Configurable visual elements (champions, minions, turrets, abilities, UI overlays).
+* R6.5: Debug mode flag for verbose logging.
 
 ---
 
@@ -285,7 +287,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
             h. `truncated = False`.
             i. `info = {}`.
             j. Return `(obs, reward, terminated, truncated, info)`."
-        10. "Method `render(self)`: Print `self.taric.stats`, `self.taric.abilities['Q'].current_cooldown`."
+        10. "Method `render(self, mode='human')`: If mode='human', show visual window. If mode='rgb_array', return numpy array. For MVP, implement text-based rendering first, visual rendering in Phase 5."
         11. "Create `examples/run_random_agent.py`. Instantiate env, loop `env.action_space.sample()`, call `env.step()`, `env.render()`."
         12. "Add `gymnasium.utils.env_checker.check_env(env)` to example script."
     * **Verification:** Random agent runs without errors. `check_env` passes.
@@ -312,6 +314,74 @@ This section breaks down the Requirements (R-sections) into granular, sequential
 * **Task 4.5:** Finalize Action Space in `TaricLaningSimEnv` (as per R2.5, including item purchase & recall).
 * **Task 4.6:** Implement full episode logic: 15 min fixed duration, champion respawn timers, return to base logic for Taric to enable item purchases.
 * **Task 4.7:** Implement comprehensive Reward Function (in-step sparse rewards + terminal evaluation based on gold/xp/turret/KDA diffs).
+
+**Phase 5: Visual Rendering System (Post-MVP Enhancement)**
+*(Tasks to implement real-time visual rendering for game observation and debugging)*
+
+* **Task 5.1: Implement Visual Renderer Base**
+    * **Objective:** Create the foundation for visual rendering using Pygame. (Ref: R6.2)
+    * **File(s):** `src/utils/visual_renderer.py`.
+    * **Instructions for AI:**
+        1.  "Import `pygame`, `numpy as np`, `typing.Dict, List, Optional, Tuple`."
+        2.  "Define class `VisualRenderer`."
+        3.  "`__init__(self, window_width: int = 1200, window_height: int = 800, fps: int = 60)`: Initialize pygame, create window, set up basic rendering parameters."
+        4.  "Method `setup_colors(self)`: Define color constants for teams, entities, UI elements."
+        5.  "Method `setup_fonts(self)`: Initialize pygame fonts for text rendering."
+        6.  "Method `render_frame(self, game_state: GameState, lane_map: LaneMap, mode: str = 'human') -> Optional[np.ndarray]`: Main rendering method that draws all game elements."
+        7.  "Method `close(self)`: Clean up pygame resources."
+        8.  "Add `pygame` to `requirements.txt`."
+
+* **Task 5.2: Implement Entity Rendering**
+    * **Objective:** Render all game entities (champions, minions, turrets) on the visual display.
+    * **File(s):** `src/utils/visual_renderer.py`.
+    * **Instructions for AI:**
+        1.  "Method `render_champions(self, surface, champions: List[GameObject], camera_offset: Tuple[int, int])`: Draw champion circles with team colors, HP bars, names."
+        2.  "Method `render_minions(self, surface, minions: List[GameObject], camera_offset: Tuple[int, int])`: Draw minion shapes with team colors and HP indicators."
+        3.  "Method `render_turrets(self, surface, turrets: List[GameObject], camera_offset: Tuple[int, int])`: Draw turrets as larger shapes with range indicators."
+        4.  "Method `render_projectiles(self, surface, projectiles: List[GameObject], camera_offset: Tuple[int, int])`: Draw ability projectiles and effects."
+        5.  "Method `world_to_screen(self, world_pos: np.ndarray, camera_offset: Tuple[int, int]) -> Tuple[int, int]`: Convert world coordinates to screen coordinates."
+
+* **Task 5.3: Implement UI and HUD Elements**
+    * **Objective:** Add game information overlay and user interface elements.
+    * **File(s):** `src/utils/visual_renderer.py`.
+    * **Instructions for AI:**
+        1.  "Method `render_map_background(self, surface, lane_map: LaneMap)`: Draw lane boundaries, terrain features."
+        2.  "Method `render_ui_overlay(self, surface, game_state: GameState)`: Draw game time, gold, levels, ability cooldowns."
+        3.  "Method `render_taric_hud(self, surface, taric: GameObject)`: Special HUD for the player-controlled Taric with detailed stats."
+        4.  "Method `render_minimap(self, surface, game_state: GameState, map_rect: Tuple[int, int, int, int])`: Small overview map in corner."
+        5.  "Method `render_ability_indicators(self, surface, champions: List[GameObject])`: Show ability ranges, casting indicators."
+
+* **Task 5.4: Integrate Visual Renderer with Gym Environment**
+    * **Objective:** Connect the visual renderer to the TaricLaningSimEnv for real-time display.
+    * **File(s):** `src/envs/taric_laning_sim_env.py`.
+    * **Instructions for AI:**
+        1.  "Import `VisualRenderer` from `..utils.visual_renderer`."
+        2.  "In `__init__`, add `self.visual_renderer: Optional[VisualRenderer] = None`."
+        3.  "Update `render(self, mode='human')` method: If mode='human' and renderer not initialized, create `VisualRenderer`. Call `self.visual_renderer.render_frame(self.game_state, self.lane_map, mode)`. Handle pygame events. Return appropriate values."
+        4.  "If mode='rgb_array', return numpy array from renderer for recording/analysis."
+        5.  "Update `close()` method to cleanup visual renderer."
+        6.  "Add render mode validation and error handling."
+
+* **Task 5.5: Add Visual Configuration and Customization**
+    * **Objective:** Make visual rendering configurable and user-friendly.
+    * **File(s):** `src/configs/visual_config.yaml`, `src/utils/visual_renderer.py`.
+    * **Instructions for AI:**
+        1.  "Create `visual_config.yaml` with: window dimensions, colors, font sizes, entity sizes, UI layout settings."
+        2.  "Method `load_visual_config(self, config_path: str)`: Load visual settings from YAML."
+        3.  "Add keyboard controls: Space (pause/unpause), arrow keys (camera movement), +/- (zoom), R (reset view)."
+        4.  "Method `handle_input_events(self) -> bool`: Process pygame events, return False if quit requested."
+        5.  "Add FPS display, performance metrics overlay."
+        6.  "Method `save_screenshot(self, filename: str)`: Save current frame as image file."
+
+* **Task 5.6: Create Visual Examples and Demos**
+    * **Objective:** Provide example scripts showcasing visual capabilities.
+    * **File(s):** `examples/visual_demo.py`, `examples/record_gameplay.py`.
+    * **Instructions for AI:**
+        1.  "Create `visual_demo.py`: Instantiate env with visual rendering, run random agent, show controls help."
+        2.  "Create `record_gameplay.py`: Record gameplay to video file using rgb_array mode and cv2."
+        3.  "Add documentation in demo files explaining visual features and controls."
+        4.  "Test visual rendering performance with different window sizes and entity counts."
+        5.  "Add `opencv-python` to requirements for video recording capabilities."
 
 ---
 ## V. Risks & Challenges (Project 1)
