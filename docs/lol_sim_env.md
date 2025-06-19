@@ -132,7 +132,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         7.  "Inside `src/configs/`, create subdirectories: `champions`, `items`."
         8.  "Inside `src/configs/items/`, create subdirectory `components`."
         9.  "For `champions`, `items`, `components`, create empty `__init__.py` inside each."
-* **Task 1.1.3: Define Base `Entity` Class**
+* ~~**Task 1.1.3: Define Base `Entity` Class**~~ ✅ **COMPLETED**
     * **Objective:** Create fundamental `Entity` class. (Ref: R2.1.1)
     * **File(s):** `src/game_logic/core/entity.py`.
     * **Instructions for AI:**
