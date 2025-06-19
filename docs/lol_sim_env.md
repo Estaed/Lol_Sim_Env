@@ -17,7 +17,7 @@
     * Scripted AI Enemies: Two configurable archetypes from a pool (e.g., "Generic Enemy ADC", "Poke Mage Support", "Engage Support") (MVP: move, basic attacks, one placeholder ability).
     * Minions (Melee, Caster, Siege) (MVP: spawn, move, basic attacks, can be killed).
     * Turrets (Outer bot lane turret for each side) (MVP: static, can attack, can be damaged).
-* **Inspiration & Reference:** Mechanics implemented will reference the [League of Legends Wiki](https://leagueoflegends.fandom.com/wiki/League_of_Legends_Wiki) for current champion abilities, item effects, minion/turret stats, and game rules (for the *current live patch*). Conceptual inspiration for structuring game logic may be drawn from understanding how other projects represent game elements, but the implementation will be new Python code.
+* **Inspiration & Reference:** Mechanics implemented will reference the [League of Legends Wiki](https://leagueoflegends.fandom.com/wiki/League_of_Legends_Wiki) for current champion abilities, item effects, minion/turret stats, and game rules (for the *current live patch*). **Data Integration:** This project integrates with the [LoL Data MCP Server](https://github.com/your-username/lol-data-mcp-server) for real-time, accurate game data and automatic configuration updates. Conceptual inspiration for structuring game logic may be drawn from understanding how other projects represent game elements, but the implementation will be new Python code.
 * **Core Deliverable:** A Python package `lol_sim_env` (installable via `pip`) providing the `TaricLaningSimEnv` Gymnasium environment.
 * **Development Philosophy:** Iterative development, focusing on core mechanics and agent interface first. NPC AI and complex interactions will be simplified for MVP and expanded in later phases. The environment's design will be continuously informed by the needs of Project 2 (Taric AI Agent), especially regarding observation/action spaces, through early and frequent integration testing of the Gym interface. A section in the README will detail explicit simplifications made compared to the live game.
 
@@ -83,8 +83,9 @@ This section outlines the target functionality. The "IV. Detailed Implementation
 
 ### R3: Configurability & Extensibility
 * R3.1: Game parameters (champion stats, abilities, minions, items, etc.) loadable from YAML configs.
-* R3.2: NPC AI logic encapsulated within their respective champion classes, allowing for varied scriptable behaviors.
-* R3.3: Modular code structure to facilitate future expansions.
+* R3.2: **MCP Integration:** Real-time data access via LoL Data MCP Server for automatic config updates.
+* R3.3: NPC AI logic encapsulated within their respective champion classes, allowing for varied scriptable behaviors.
+* R3.4: Modular code structure to facilitate future expansions.
 
 ### R4: Performance
 * R4.1: `step()` function optimized for speed (target: thousands of steps/sec on CPU).
@@ -165,7 +166,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         4.  "Method `tick(self)`: Advances `self.current_time` by `self.tick_duration * self.game_speed_multiplier`."
         5.  "Method `get_time_delta(self) -> float`: Returns `self.tick_duration * self.game_speed_multiplier`."
         6.  "Method `reset(self)`: Sets `self.current_time = 0.0`."
-* **Task 1.1.6: Implement `GameState` Container**
+* ~~**Task 1.1.6: Implement `GameState` Container**~~ ✅ **COMPLETED**
     * **Objective:** Hold all game entities and manage global state. (Ref: R2.1.4)
     * **File(s):** `src/game_logic/core/game_state.py`.
     * **Instructions for AI:**

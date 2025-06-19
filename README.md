@@ -11,9 +11,10 @@ This project creates a custom, lightweight, and fast Python simulation of the Lo
 - **OpenAI Gymnasium Compatible**: Standard RL environment interface
 - **Headless Operation**: Runs without GUI dependencies for cloud training
 - **Configurable Game Speed**: Accelerate training with time multipliers
-- **Realistic Game Mechanics**: Based on League of Legends Wiki data
+- **Realistic Game Mechanics**: Based on real-time LoL data via MCP integration
 - **2v2 Bot Lane Focus**: Taric + ADC vs Enemy Support + Enemy ADC
 - **Modular Architecture**: Extensible system design
+- **MCP Data Integration**: Automatic config updates from [LoL Data MCP Server](https://github.com/your-username/lol-data-mcp-server)
 
 ## Target Scenario
 
@@ -34,7 +35,10 @@ This project creates a custom, lightweight, and fast Python simulation of the Lo
 
 ## Related Projects
 
-This environment is designed to work with the **Taric AI Agent** project, which trains AI agents using a combination of Imitation Learning (from live LoL games) and Reinforcement Learning (using this simulation environment).
+This environment is designed to work with:
+
+- **[Taric AI Agent](https://github.com/your-username/taric-ai-agent)**: Trains AI agents using Imitation Learning + Reinforcement Learning
+- **[LoL Data MCP Server](https://github.com/your-username/lol-data-mcp-server)**: Provides real-time LoL game data for accurate simulation configs
 
 ---
 
