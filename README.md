@@ -26,8 +26,20 @@ This project creates a custom, lightweight, and fast Python simulation of the Lo
 
 ## Documentation
 
+### Project Documentation
 - **[Project Specification](docs/lol_sim_env.md)**: Complete project requirements, features, and detailed implementation plan
 - **[Architecture Overview](docs/Architecture_env.md)**: File structure and architectural design
+
+### External Data Sources
+- **[League of Legends Wiki](https://wiki.leagueoflegends.com/en-us/)**: Primary data source for champion stats, abilities, and game mechanics
+- **[Riot Data Dragon](https://developer.riotgames.com/docs/lol#data-dragon)**: Official champion and item data
+
+### IDE Integration - Cursor Settings
+For enhanced development experience, add these documentation sources to your Cursor IDE:
+
+1. **Open Cursor Settings** → `Cursor: Docs`
+2. **Add Documentation Sources**: League of Legends Wiki, Riot Developer Portal
+3. **Enable Indexing**: For LoL-specific terminology and champion/item auto-completion
 
 ## Development Status
 
