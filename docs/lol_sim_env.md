@@ -153,7 +153,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         6.  "Method `take_damage(self, amount: float, damage_type: str = 'physical') -> float`: Decrease `self.stats['hp']` by calculated damage (considering resistances later), clamped at 0. Return actual damage taken."
         7.  "Method `heal(self, amount: float) -> float`: Increase `self.stats['hp']` by `amount`, clamped at `self.stats.get('max_hp', self.stats['hp'])`. Return actual healing done."
         8.  "Property `is_alive(self) -> bool`: Returns `self.stats.get('hp', 0) > 0`."
-* **Task 1.1.5: Implement `GameClock`**
+* ~~**Task 1.1.5: Implement `GameClock`**~~ ✅ **COMPLETED**
     * **Objective:** Manage simulation time and speed. (Ref: R2.1.3)
     * **File(s):** `src/game_logic/core/game_clock.py`.
     * **Instructions for AI:**
