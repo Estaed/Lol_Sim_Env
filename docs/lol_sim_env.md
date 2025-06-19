@@ -167,7 +167,7 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         6.  "Method `reset(self)`: Sets `self.current_time = 0.0`."
 * **Task 1.1.6: Implement `GameState` Container**
     * **Objective:** Hold all game entities and manage global state. (Ref: R2.1.4)
-    * **File(s):** `src/game_logic/game_state.py`.
+    * **File(s):** `src/game_logic/core/game_state.py`.
     * **Instructions for AI:**
         1.  "Import `GameClock`, `List, Dict, Type` from `typing`, `GameObject`."
         2.  "Define class `GameState`."
