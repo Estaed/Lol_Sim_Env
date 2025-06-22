@@ -1,7 +1,7 @@
 # Project 1 PRD: LoL Simulated Laning Environment (`lol_sim_env`)
 
 **Version:** 1.2
-**Date:** May 28, 2025
+**Date:** June 2025
 **Project Goal:** To develop a Python-based, OpenAI Gym-compatible **simulated environment** representing a 2v2 League of Legends bot-lane laning phase. This environment will feature Taric and relevant archetypes (ADC, enemy support, enemy ADC), focusing on core mechanics and ability interactions. It must be designed to run efficiently headless for Reinforcement Learning agent training, particularly on cloud GPU platforms, and allow for configurable game speed. Development will be iterative, with NPC AI and complex interactions simplified for MVP and expanded later.
 
 ---
@@ -203,7 +203,46 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         2.  "Define `TEAM_RED = 1`."
         3.  "Define `MAX_LEVEL = 18`."
 
-**Phase 2: Champion Implementation & Basic Movement (Corresponds to old M1.2)**
+**Phase 1.5: MCP Integration Foundation (NEW - PRIORITY)**
+
+* **Task 1.5.1: Setup MCP Client Infrastructure**
+    * **Objective:** Establish connection to LoL Data MCP Server for real-time game data access.
+    * **File(s):** `src/utils/mcp_client.py`, `src/configs/mcp_config.yaml`.
+    * **Instructions for AI:**
+        1.  "Create `MCPDataClient` class with connection management and error handling."
+        2.  "Implement `connect()`, `disconnect()`, and `call_tool()` methods using MCP protocol."
+        3.  "Add configuration file for MCP server settings (host, port, authentication)."
+        4.  "Implement caching layer for frequently accessed data (champion stats, item data)."
+        5.  "Add fallback mechanism to local YAML files if MCP server unavailable."
+        6.  "Create comprehensive logging for debugging MCP interactions."
+    * **Verification:** Can successfully connect to MCP server and call basic tools.
+
+* **Task 1.5.2: Implement Game Data Fetcher**
+    * **Objective:** Create unified interface for fetching all game data via MCP.
+    * **File(s):** `src/utils/game_data_fetcher.py`.
+    * **Instructions for AI:**
+        1.  "Create `GameDataFetcher` class wrapping `MCPDataClient` with game-specific methods."
+        2.  "Implement `get_champion_stats(name: str, level: int = 1) -> Dict` using MCP `get_champion_data` tool."
+        3.  "Implement `get_item_data(name: str) -> Dict` using MCP `get_item_data` tool."
+        4.  "Implement `get_ability_data(champion: str, ability: str) -> Dict` for detailed ability parameters."
+        5.  "Add `get_minion_stats(type: str, game_time: float) -> Dict` for time-scaled minion data."
+        6.  "Add `get_turret_stats(position: str) -> Dict` for accurate turret data."
+        7.  "Implement data validation and format conversion for simulation compatibility."
+    * **Verification:** All game entities can be created with accurate, current-patch data from MCP.
+
+* **Task 1.5.3: Create MCP-Powered Configuration System**
+    * **Objective:** Replace static YAML configs with dynamic MCP data loading.
+    * **File(s):** `src/utils/config_manager.py`.
+    * **Instructions for AI:**
+        1.  "Create `ConfigManager` class that prioritizes MCP data over static configs."
+        2.  "Implement `load_champion_config(name: str)` that fetches from MCP first, falls back to YAML."
+        3.  "Add `load_item_config(name: str)` with MCP integration and local caching."
+        4.  "Implement `validate_data_consistency()` to ensure MCP and local data compatibility."
+        5.  "Add `update_local_configs()` method to sync MCP data to local YAML files for offline use."
+        6.  "Create configuration versioning to track patch changes."
+    * **Verification:** Configuration system seamlessly switches between MCP and local data sources.
+
+**Phase 2: Champion Implementation & Basic Movement (Enhanced with MCP Integration)**
 
 * **Task 2.1: Implement `Champion` Base Class**
     * **Objective:** Define core champion attributes and methods. (Ref: R2.2.1)
@@ -228,14 +267,27 @@ This section breaks down the Requirements (R-sections) into granular, sequential
         2.  "Define class `MovementSystem`."
         3.  "Method `move_entity_towards(self, entity: GameObject, target_position: np.ndarray, time_delta: float, game_map: LaneMap)`: Calculate direction vector. Calculate distance to move (`entity.stats['move_speed'] * time_delta`). New position is current + `direction * distance_to_move`. Ensure new position is within `game_map.is_within_bounds()`. Update `entity.position`."
         4.  "Method `handle_collisions(self, entity: GameObject, all_other_entities: List[GameObject])`: (MVP Simplification) For now, if `entity` overlaps significantly with any other (based on radii), revert its last movement or prevent it. More complex response deferred."
-* **Task 2.3: Implement `Taric` Specifics (Stats & Config)**
-    * **Objective:** Create `Taric` class and load his base data. (Ref: R2.2.2)
-    * **File(s):** `src/game_logic/units/taric.py`, `src/configs/champions/taric.yaml`.
+* **Task 2.3: Implement MCP Data Integration for Champion Stats**
+    * **Objective:** Create MCP client to fetch accurate, up-to-date champion data instead of manual YAML creation. (Ref: R2.2.2, R3.2)
+    * **File(s):** `src/utils/mcp_client.py`, `src/configs/mcp_config.yaml`.
     * **Instructions for AI:**
-        1.  "In `taric.py`, import `Champion`."
+        1.  "Create `mcp_client.py` with `MCPDataClient` class for LoL Data MCP Server communication."
+        2.  "Implement `fetch_champion_data(champion_name: str) -> Dict` using MCP `get_champion_data` tool."
+        3.  "Add configuration `mcp_config.yaml` with server connection settings."
+        4.  "Add caching mechanism to avoid repeated MCP calls for same data."
+        5.  "Add fallback to local YAML if MCP server unavailable."
+        6.  "Add `mcp-client` and `requests` to `requirements.txt`."
+    * **Verification:** Can fetch Taric's complete stats and abilities from MCP server with accurate, current patch data.
+
+* **Task 2.4: Implement `Taric` Class with MCP Data**
+    * **Objective:** Create `Taric` class using MCP-sourced data instead of manual YAML. (Ref: R2.2.2)
+    * **File(s):** `src/game_logic/units/taric.py`.
+    * **Instructions for AI:**
+        1.  "In `taric.py`, import `Champion` and `MCPDataClient`."
         2.  "Define class `Taric(Champion)`."
-        3.  "`__init__(self, entity_id: str, team_id: int, position: np.ndarray, radius: float, base_stats: Dict[str, float])`: Call `super().__init__(..., champion_name='Taric')`. Later, initialize Taric's specific abilities here."
-        4.  "Create `taric.yaml` in `configs/champions/`. Populate with Taric's Level 1 base stats (HP, Mana, AD, Armor, MR, MS, Attack Range, HP Regen, Mana Regen etc.) by referencing the official League of Legends Wiki for *Taric*. Also add growth stats (e.g., `hp_per_level`). Add ability parameters for Q,W,E,R (e.g., `q_base_heal`, `q_mana_cost`, `q_cooldown`)."
+        3.  "`__init__(self, entity_id: str, team_id: int, position: np.ndarray, radius: float, mcp_client: MCPDataClient)`: Fetch Taric data via `mcp_client.fetch_champion_data('Taric')`. Extract base stats, growth stats, and ability parameters from MCP response. Call `super().__init__(..., champion_name='Taric')` with MCP-sourced base_stats."
+        4.  "Initialize abilities using MCP ability data (Q, W, E, R parameters like base_heal, mana_cost, cooldown, etc.)."
+    * **Verification:** Taric loads with accurate current-patch stats and abilities from MCP server.
 * **Task 2.4: Create `Ability` Base and `AbilitySystem` Shell**
     * **Objective:** Define structure for abilities and their management. (Ref: R2.3.1)
     * **File(s):** `src/game_logic/units/ability.py` (or `systems/`), `src/game_logic/systems/ability_system.py`.
@@ -297,11 +349,49 @@ This section breaks down the Requirements (R-sections) into granular, sequential
 **Phase 3: Adding Other Units & Basic AI (Corresponds to old M1.4)**
 *(Tasks here will be similar in granularity: define class, load config, implement very simple AI method, add to GameState, update Observation/Action space in Env if Taric interacts with them, update CombatSystem)*
 
-* **Task 3.1:** Implement `Minion` class, basic AI (move fixed path, attack nearest if in range), wave spawning.
-* **Task 3.2:** Implement `Turret` class, basic AI (attack nearest in range).
+* **Task 3.1:** Implement `Minion` Class with MCP Data Integration
+    * **Objective:** Create minion system using accurate minion data from MCP server.
+    * **File(s):** `src/game_logic/units/minion.py`.
+    * **Instructions for AI:**
+        1.  "Create `Minion` class using MCP-sourced minion stats (HP, AD, Armor, MR, MS, Gold reward)."
+        2.  "Implement time-scaling using MCP game mechanics data (minion stat growth over time)."
+        3.  "Add wave spawning logic using MCP timing data (spawn intervals, wave composition)."
+        4.  "Implement minion AI using MCP behavior patterns (aggro rules, target prioritization)."
+        5.  "Add different minion types (Melee, Caster, Siege) with MCP-accurate stats and behaviors."
+    * **Verification:** Minions spawn and behave according to current LoL mechanics from MCP data.
+
+* **Task 3.2:** Implement `Turret` Class with MCP Data Integration  
+    * **Objective:** Create turret system using accurate turret data from MCP server.
+    * **File(s):** `src/game_logic/units/turret.py`.
+    * **Instructions for AI:**
+        1.  "Create `Turret` class using MCP-sourced turret stats (HP, AD, Armor, MR, Attack Range, Attack Speed)."
+        2.  "Implement turret targeting AI using MCP priority rules (champion > minion priorities)."
+        3.  "Add turret damage ramping using MCP mechanics data (increasing damage on same target)."
+        4.  "Implement turret protection mechanics from MCP (fortification, backdoor protection)."
+        5.  "Add position-specific turret variations (Outer, Inner) with accurate stats from MCP."
+    * **Verification:** Turrets behave according to current LoL turret mechanics from MCP data.
 * **Task 3.3:** Implement `AllyADC` class, basic AI (follow Taric, attack nearest).
-* **Task 3.4:** Implement `EnemyChampion` archetypes (e.g., `EnemyADCArchetype`, `EnemyPokeSupportArchetype`) with 1 placeholder ability each and very simple AI (stay in lane, attack nearest).
-* **Task 3.5:** Implement `ExperienceSystem` & `GoldSystem` (passive gain, CS for Taric only for MVP, simplified "item purchase" for Taric as stat block if gold > X and at "base" after recall/respawn action).
+* **Task 3.4:** Implement `EnemyChampion` Archetypes with MCP Data Integration
+    * **Objective:** Create enemy champion archetypes using accurate champion data from MCP server.
+    * **File(s):** `src/game_logic/units/enemy_champions.py`.
+    * **Instructions for AI:**
+        1.  "Create `EnemyChampion` base class with MCP data integration."
+        2.  "Implement `EnemyADCArchetype` using MCP data for popular ADC champions (Jinx, Caitlyn, etc.)."
+        3.  "Implement `EnemyPokeSupportArchetype` using MCP data for poke supports (Brand, Zyra, etc.)."
+        4.  "Implement `EnemyEngageSupportArchetype` using MCP data for engage supports (Leona, Nautilus, etc.)."
+        5.  "Use MCP `get_champion_data` to get accurate base stats and one signature ability per archetype."
+        6.  "Add simple AI that uses champion-specific ability patterns from MCP meta analysis."
+    * **Verification:** Enemy champions have realistic stats and abilities based on current patch data.
+* **Task 3.5:** Implement `ExperienceSystem` & `GoldSystem` with MCP Item Integration (passive gain, CS for Taric only for MVP, MCP-powered item purchase system).
+    * **Objective:** Create gold/XP systems with accurate item data from MCP server.
+    * **File(s):** `src/game_logic/systems/gold_system.py`, `src/game_logic/systems/experience_system.py`, `src/game_logic/units/item.py`.
+    * **Instructions for AI:**
+        1.  "In `gold_system.py`, implement passive gold gain, CS gold rewards, item purchase validation."
+        2.  "Add MCP integration: `fetch_item_data(item_name: str)` for accurate costs and stats."
+        3.  "In `item.py`, create `Item` class with MCP-sourced stats (Echoes of Helia, Knight's Vow, components)."
+        4.  "Implement `purchase_item_by_name(champion: Champion, item_name: str, mcp_client: MCPDataClient)` with real item costs and stat bonuses."
+        5.  "Add item build path validation using MCP component data."
+    * **Verification:** Taric can purchase items with accurate current-patch costs and stat bonuses from MCP.
 * **Task 3.6:** Expand `TaricLaningSimEnv` Observation Space for new units (relative positions, HP).
 * **Task 3.7:** Expand `TaricLaningSimEnv` Action Space for Taric (e.g., `ATTACK_ENEMY_MINION_CLOSEST`, `ATTACK_ENEMY_CHAMPION_CLOSEST`).
 
